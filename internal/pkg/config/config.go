@@ -2,6 +2,7 @@ package config
 
 import (
 	"io/ioutil"
+	"log"
 	"path/filepath"
 
 	"github.com/dust347/dazi/internal/model"
@@ -10,12 +11,13 @@ import (
 )
 
 var (
-	cfg *model.Config
+	cfg *model.Config = &model.Config{}
 )
 
 // SetConfig 设置配置
 func SetConfig(file string) error {
 	f, err := filepath.Abs(file)
+	log.Println(f)
 	if err != nil {
 		return err
 	}

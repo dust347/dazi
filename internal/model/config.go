@@ -20,7 +20,7 @@ type DatabaseConfig struct {
 }
 
 // DatabaseType database 类型
-type DatabaseType string
+type DatabaseType = string
 
 const (
 	// DatabaseTypeMysql mysql
