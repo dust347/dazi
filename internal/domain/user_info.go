@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"log"
 
 	"github.com/dust347/dazi/internal/dao"
 	"github.com/dust347/dazi/internal/model"
@@ -13,6 +14,8 @@ import (
 // UserInfoRepo 用户信息管理
 type UserInfoRepo struct {
 	user dao.UserInfoManager
+	poi  dao.PoiGetter ``
+	wx   dao.LoginChecker
 }
 
 // NewUserInfoRepo 创建 UserInfoRepo 实例
@@ -25,7 +28,46 @@ func NewUserInfoRepo() (*UserInfoRepo, error) {
 		return nil, errors.WithMsg(err, "init user info err")
 	}
 
+	repo.poi, err = dao.NewPoiGetter(&config.GetConfig().Database.Poi)
+	if err != nil {
+		return nil, errors.WithMsg(err, "init poi err")
+	}
+
+	repo.wx, err = dao.NewLoginChecker(&config.GetConfig().Database.WxMiniProgram)
+
 	return &repo, nil
+}
+
+// Login 登录逻辑
+func (repo *UserInfoRepo) Login(ctx context.Context, jsCode string, user *model.UserInfo) (*model.UserInfo, error) {
+	// wx 验证
+	resp, err := repo.wx.Check(ctx, &model.LoginCheckReq{
+		Code: jsCode,
+	})
+	if err != nil {
+		return nil, errors.WithMsg(err, "wx login check err")
+	}
+
+	// 查询用户信息
+	u, err := repo.user.QueryByOpenID(ctx, resp.OpenID)
+	if err != nil {
+		return nil, errors.WithMsg(err, "query user info err")
+	}
+
+	// 没有用户信息，则创建
+	if u == nil {
+		if err := repo.Create(ctx, user); err != nil {
+			return nil, err
+		}
+		return user, nil
+	}
+	// 否则更新
+	user.ID = u.ID
+	if err := repo.Update(ctx, user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 // Create 创建用户信息
@@ -71,4 +113,35 @@ func (repo *UserInfoRepo) Query(ctx context.Context, id string) (*model.UserInfo
 	}
 
 	return userInfo, nil
+}
+
+// Nearby 附近的人
+func (repo *UserInfoRepo) Nearby(ctx context.Context, id string, loc *model.Location) ([]model.UserInfo, error) {
+	city, err := repo.poi.GetCity(ctx, loc)
+	if err != nil {
+		return nil, errors.WithMsg(err, "get city info err")
+	}
+	if city == nil {
+		return nil, errors.New(errors.ParamErr, "city not found")
+	}
+
+	log.Printf("city: %+v", city)
+
+	users, err := repo.user.QueryUsersByCity(ctx, city.CityCode)
+	if err != nil {
+		return nil, errors.WithMsg(err, "query users err")
+	}
+	if len(users) == 0 {
+		return nil, nil
+	}
+
+	nearby := make([]model.UserInfo, 0, len(users))
+	for i := range users {
+		if users[i].ID == id {
+			continue
+		}
+		nearby = append(nearby, users[i])
+	}
+
+	return nearby, nil
 }

@@ -28,3 +28,11 @@ func TestUserInfoJSON(t *testing.T) {
 	}
 	t.Logf("%s", b)
 }
+
+func TestLocation(t *testing.T) {
+	loc := Location{
+		Latitude:  39915003,
+		Longitude: 116483574,
+	}
+	t.Log(loc.String())
+}

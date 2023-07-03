@@ -112,6 +112,11 @@ type Location struct {
 	Longitude int64 `json:"longitude"`
 }
 
+// String ...
+func (loc *Location) String() string {
+	return fmt.Sprintf("%f,%f", float64(loc.Latitude)/1e6, float64(loc.Longitude)/1e6)
+}
+
 // Scan 实现 sql.Scanner 接口
 func (loc *Location) Scan(value interface{}) error {
 	s, ok := value.([]byte)
@@ -141,4 +146,10 @@ func (loc *Location) Scan(value interface{}) error {
 // Value 实现 driver.Valuer 接口
 func (loc Location) Value() (driver.Value, error) {
 	return fmt.Sprintf("%d,%d", loc.Latitude, loc.Longitude), nil
+}
+
+// CityInfo 城市信息
+type CityInfo struct {
+	CityCode string
+	CityName string
 }

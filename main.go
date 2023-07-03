@@ -13,14 +13,12 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	r.POST("/user/login", service.Login)
+	r.Use(service.MiddlewareAuth())
 	r.GET("/user/query", service.UserQuery)
-	r.POST("/user/create", service.UserCreate)
 	r.POST("/user/update", service.UserUpdate)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	r.POST("/nearby", service.Nearby)
 
 	r.Run()
 }

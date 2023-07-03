@@ -14,6 +14,11 @@ var (
 	cfg *model.Config = &model.Config{}
 )
 
+// SetConfig4Test ...
+func SetConfig4Test(c *model.Config) {
+	cfg = c
+}
+
 // SetConfig 设置配置
 func SetConfig(file string) error {
 	f, err := filepath.Abs(file)

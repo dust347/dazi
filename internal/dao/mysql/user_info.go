@@ -64,6 +64,21 @@ func (cli *UserInfoClient) Query(ctx context.Context, id string) (*model.UserInf
 	return &user, nil
 }
 
+// QueryByOpenID 根据 openid 查询用户数据
+func (cli *UserInfoClient) QueryByOpenID(ctx context.Context, openid string) (*model.UserInfo, error) {
+	var user model.UserInfo
+	err := cli.prx.Table(cli.cfg.Name).
+		First(&user).Where("open_id = ?", openid).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, errors.WithMsg(err, "select err")
+	}
+
+	return &user, nil
+}
+
 // Update 更新数据
 func (cli *UserInfoClient) Update(ctx context.Context, user *model.UserInfo) error {
 	if user == nil {
@@ -76,4 +91,20 @@ func (cli *UserInfoClient) Update(ctx context.Context, user *model.UserInfo) err
 	}
 
 	return nil
+}
+
+// QueryUsersByCity 根据城市码查询用户
+func (cli *UserInfoClient) QueryUsersByCity(ctx context.Context, cityCode string) ([]model.UserInfo, error) {
+	if cityCode == "" {
+		return nil, nil
+	}
+
+	var users []model.UserInfo
+	err := cli.prx.Table(cli.cfg.Name).
+		Where("city = ?", cityCode).Find(&users).Error
+	if err != nil {
+		return nil, errors.WithMsg(err, "query users by city err")
+	}
+
+	return users, nil
 }
