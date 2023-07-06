@@ -35,7 +35,7 @@ func (cli *LoginCheckClient) Check(ctx context.Context, req *model.LoginCheckReq
 		return nil, errors.New(errors.ParamErr, "req is nil")
 	}
 	r, err := cli.prx.Get(fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
-		cli.cfg.Namespace, cli.cfg.Name, req.Code))
+		cli.cfg.Namespace, cli.cfg.Target, req.Code))
 	if err != nil {
 		return nil, errors.WithMsg(err, "http get err")
 	}

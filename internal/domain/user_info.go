@@ -34,6 +34,9 @@ func NewUserInfoRepo() (*UserInfoRepo, error) {
 	}
 
 	repo.wx, err = dao.NewLoginChecker(&config.GetConfig().Database.WxMiniProgram)
+	if err != nil {
+		return nil, errors.WithMsg(err, "init wx err")
+	}
 
 	return &repo, nil
 }
@@ -54,6 +57,7 @@ func (repo *UserInfoRepo) Login(ctx context.Context, jsCode string, user *model.
 		return nil, errors.WithMsg(err, "query user info err")
 	}
 
+	user.OpenID = resp.OpenID
 	// 没有用户信息，则创建
 	if u == nil {
 		if err := repo.Create(ctx, user); err != nil {
