@@ -51,5 +51,9 @@ func (cli *LoginCheckClient) Check(ctx context.Context, req *model.LoginCheckReq
 		return nil, errors.WithMsg(err, "body unmarshal err")
 	}
 
+	if resp.ErrCode != 0 {
+		return nil, errors.New(resp.ErrCode, resp.ErrMsg)
+	}
+
 	return &resp, nil
 }

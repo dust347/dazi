@@ -54,14 +54,17 @@ func (date Date) MarshalJSON() ([]byte, error) {
 
 // String ...
 func (date Date) String() string {
+	if time.Time(date).IsZero() {
+		return ""
+	}
 	return time.Time(date).Format(DateFormat)
 }
 
 // Value insert timestamp into mysql need this function.
 func (date Date) Value() (driver.Value, error) {
-	//if time.Time(date).IsZero() {
-	//	return nil, nil
-	//}
+	if time.Time(date).IsZero() {
+		return nil, nil
+	}
 	return time.Time(date), nil
 }
 
@@ -71,6 +74,12 @@ func (date *Date) Scan(value interface{}) error {
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal time value:", value))
 	}
+
+	if timeValue.IsZero() {
+		*date = Date(time.Time{})
+		return nil
+	}
+
 	*date = Date(timeValue)
 	return nil
 }

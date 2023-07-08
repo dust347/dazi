@@ -53,7 +53,7 @@ func (cli *UserInfoClient) Create(ctx context.Context, user *model.UserInfo) err
 func (cli *UserInfoClient) Query(ctx context.Context, id string) (*model.UserInfo, error) {
 	var user model.UserInfo
 	err := cli.prx.Table(cli.cfg.Name).
-		First(&user).Where("id = ?", id).Error
+		Where("id = ?", id).First(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
@@ -68,7 +68,7 @@ func (cli *UserInfoClient) Query(ctx context.Context, id string) (*model.UserInf
 func (cli *UserInfoClient) QueryByOpenID(ctx context.Context, openid string) (*model.UserInfo, error) {
 	var user model.UserInfo
 	err := cli.prx.Table(cli.cfg.Name).
-		First(&user).Where("open_id = ?", openid).Error
+		Where("open_id = ?", openid).First(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
@@ -85,7 +85,7 @@ func (cli *UserInfoClient) Update(ctx context.Context, user *model.UserInfo) err
 		return errors.New(errors.ParamErr, "user is nil")
 	}
 
-	err := cli.prx.Table(cli.cfg.Name).Updates(user).Where("id = ?", user.ID).Error
+	err := cli.prx.Table(cli.cfg.Name).Where("id = ?", user.ID).Updates(user).Error
 	if err != nil {
 		return errors.WithMsg(err, "update err")
 	}
