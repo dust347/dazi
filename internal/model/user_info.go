@@ -121,6 +121,11 @@ type Location struct {
 	Longitude int64 `json:"longitude"`
 }
 
+// IsEmpty 是否为空
+func (loc *Location) IsEmpty() bool {
+	return loc.Latitude == 0 && loc.Longitude == 0
+}
+
 // String ...
 func (loc *Location) String() string {
 	return fmt.Sprintf("%f,%f", float64(loc.Latitude)/1e6, float64(loc.Longitude)/1e6)

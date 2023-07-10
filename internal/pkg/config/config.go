@@ -5,6 +5,7 @@ import (
 	"log"
 	"path/filepath"
 
+	"github.com/caarlos0/env/v9"
 	"github.com/dust347/dazi/internal/model"
 	"github.com/dust347/dazi/internal/pkg/errors"
 	"gopkg.in/yaml.v3"
@@ -32,6 +33,20 @@ func SetConfig(file string) error {
 	}
 	if err := yaml.Unmarshal(b, cfg); err != nil {
 		return errors.WithMsg(err, "unmarshal err")
+	}
+
+	return nil
+}
+
+// Load 加载配置
+func Load() error {
+	opts := env.Options{
+		Prefix: "T_",
+	}
+
+	// Load env vars.
+	if err := env.ParseWithOptions(cfg, opts); err != nil {
+		return errors.WithMsg(err, "parse env err")
 	}
 
 	return nil

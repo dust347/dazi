@@ -97,6 +97,15 @@ func (repo *UserInfoRepo) Update(ctx context.Context, user *model.UserInfo) erro
 	if user.ID == "" {
 		return errors.New(errors.ParamErr, "id empty")
 	}
+	// 如果 location 不为空，获取地址信息
+	if !user.Location.IsEmpty() {
+		city, err := repo.poi.GetCity(ctx, &user.Location)
+		if err != nil {
+			return errors.WithMsg(err, "get city err")
+		}
+		user.City = city.CityCode
+		user.CityName = city.CityName
+	}
 
 	if err := repo.user.Update(ctx, user); err != nil {
 		return errors.WithMsg(err, "update err")

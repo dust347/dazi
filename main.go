@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	config.SetConfig("./config.yaml") // 临时
+	if err := config.Load(); err != nil {
+		panic(err)
+	}
 	if err := service.Init(); err != nil {
 		panic(err)
 	}
