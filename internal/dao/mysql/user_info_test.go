@@ -2,10 +2,16 @@ package mysql
 
 import (
 	"context"
+	"net"
 	"testing"
 
 	"github.com/dust347/dazi/internal/model"
 )
+
+func TestHost(t *testing.T) {
+	hp := net.JoinHostPort("bj-cdb-gfmnayaq.sql.tencentcdb.com", "63814")
+	t.Log(hp)
+}
 
 func TestCreate(t *testing.T) {
 	cli, err := NewUserInfoClient(&model.DatabaseConfig{

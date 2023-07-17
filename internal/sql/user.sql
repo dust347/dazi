@@ -9,7 +9,9 @@ CREATE TABLE `t_user_info` (
     `city` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '城市',
     `city_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '城市名称',
     `nick_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '昵称',
+    `avatar_url` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '头像 url',
     `tags` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '标签',
     `location` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '位置',
+    `detail` VARCHAR(512) NOT NULL DEFAULT '' COMMENT '详情',
     UNIQUE KEY `idx_openid` (`open_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户信息表';

@@ -15,13 +15,15 @@ type UserInfo struct {
 	OpenID string `json:"open_id" gorm:"column:open_id"`
 	Phone  string `json:"phone" gorm:"column:phone"`
 
-	Birthday Date     `json:"birthday" gorm:"column:birthday"`
-	Gender   Gender   `json:"gender" gorm:"column:gender"`
-	City     string   `json:"city" gorm:"column:city"`
-	CityName string   `json:"city_name" gorm:"column:city_name"`
-	NickName string   `json:"nick_name" gorm:"column:nick_name"`
-	Tags     Tags     `json:"tags" gorm:"column:tags"`
-	Location Location `json:"location" gorm:"column:location"`
+	Birthday  Date     `json:"birthday" gorm:"column:birthday"`
+	Gender    Gender   `json:"gender" gorm:"column:gender"`
+	City      string   `json:"city" gorm:"column:city"`
+	CityName  string   `json:"city_name" gorm:"column:city_name"`
+	NickName  string   `json:"nick_name" gorm:"column:nick_name"`
+	AvatarURL string   `json:"avatar_url" gorm:"column:avatar_url"`
+	Tags      Tags     `json:"tags" gorm:"column:tags"`
+	Location  Location `json:"location" gorm:"column:location"`
+	Detail    string   `json:"detail" gorm:"column:detail"`
 }
 
 // Date 日期
