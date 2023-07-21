@@ -8,9 +8,9 @@ CREATE TABLE `t_user_info` (
     `gender` TINYINT NOT NULL DEFAULT 0 COMMENT '性别 0-未知, 1-男, 2-女',
     `city` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '城市',
     `city_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '城市名称',
-    `nick_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '昵称',
-    `avatar_url` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '头像 url',
-    `tags` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '标签',
+    `nick_name` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '昵称',
+    `avatar_url` VARCHAR(256) NOT NULL DEFAULT '' COMMENT '头像 url',
+    `tags` VARCHAR(256) NOT NULL DEFAULT '' COMMENT '标签',
     `location` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '位置',
     `detail` VARCHAR(512) NOT NULL DEFAULT '' COMMENT '详情',
     UNIQUE KEY `idx_openid` (`open_id`)

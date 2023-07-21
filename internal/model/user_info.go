@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql/driver"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -162,6 +163,34 @@ func (loc *Location) Scan(value interface{}) error {
 // Value 实现 driver.Valuer 接口
 func (loc Location) Value() (driver.Value, error) {
 	return fmt.Sprintf("%d,%d", loc.Latitude, loc.Longitude), nil
+}
+
+// MarshalJSON ...
+func (loc Location) MarshalJSON() ([]byte, error) {
+
+	l := struct {
+		Latitude  float64 `json:"latitude"`
+		Longitude float64 `json:"longitude"`
+	}{
+		Latitude:  float64(loc.Latitude) / 1e6,
+		Longitude: float64(loc.Longitude) / 1e6,
+	}
+	return json.Marshal(l)
+}
+
+// UnmarshalJSON ...
+func (loc *Location) UnmarshalJSON(data []byte) error {
+	l := struct {
+		Latitude  float64 `json:"latitude"`
+		Longitude float64 `json:"longitude"`
+	}{}
+
+	if err := json.Unmarshal(data, &l); err != nil {
+		return err
+	}
+	loc.Latitude = int64(l.Latitude * 1e6)
+	loc.Longitude = int64(l.Longitude * 1e6)
+	return nil
 }
 
 // CityInfo 城市信息

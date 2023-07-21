@@ -27,6 +27,12 @@ func TestUserInfoJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("%s", b)
+
+	var user UserInfo
+	if err := json.Unmarshal(b, &user); err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v", user)
 }
 
 func TestLocation(t *testing.T) {
@@ -35,4 +41,10 @@ func TestLocation(t *testing.T) {
 		Longitude: 116483574,
 	}
 	t.Log(loc.String())
+
+	b, err := json.Marshal(loc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%s", b)
 }
