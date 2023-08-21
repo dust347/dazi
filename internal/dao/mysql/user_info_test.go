@@ -24,18 +24,18 @@ func TestCreate(t *testing.T) {
 	}
 
 	t.Log(cli.Create(context.Background(), &model.UserInfo{
-		ID:     "123456",
-		OpenID: "2345",
+		ID:     "12345678",
+		OpenID: "234568",
 		Phone:  "18522223333",
 		//Birthday: model.Date(time.Now()),
 		Gender:   model.GenderMale,
 		City:     "156110000",
 		CityName: "北京市",
-		NickName: "刘馋",
+		NickName: "刘肉段",
 		Tags:     model.Tags{"喵", "吃"},
 		Location: model.Location{
-			Longitude: 39915003,
-			Latitude:  116483574,
+			Longitude: 39915113,
+			Latitude:  116484554,
 		},
 	}))
 }

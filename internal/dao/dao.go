@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 
+	"github.com/dust347/dazi/internal/dao/cos"
 	"github.com/dust347/dazi/internal/dao/mysql"
 	"github.com/dust347/dazi/internal/dao/tx"
 	"github.com/dust347/dazi/internal/dao/wx"
@@ -71,6 +72,25 @@ func NewPoiGetter(cfg *model.DatabaseConfig) (PoiGetter, error) {
 	switch cfg.Type {
 	case model.DatabaseTypeTxMap:
 		return tx.NewPoiClient(cfg)
+	default:
+		return nil, errors.Errorf(errors.ParamErr, "not support type: %s", cfg.Type)
+	}
+}
+
+// ImageUploader 图片上报
+type ImageUploader interface {
+	Upload(ctx context.Context, fileName string, image model.ImageFile) (string, error)
+}
+
+// NewImageUploader 创建 ImageUploader 实例
+func NewImageUploader(cfg *model.DatabaseConfig) (ImageUploader, error) {
+	if cfg == nil {
+		return nil, errors.New(errors.ParamErr, "cfg is nil")
+	}
+
+	switch cfg.Type {
+	case model.DatabaseTypeCos:
+		return cos.NewClient(cfg)
 	default:
 		return nil, errors.Errorf(errors.ParamErr, "not support type: %s", cfg.Type)
 	}

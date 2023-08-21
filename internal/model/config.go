@@ -17,6 +17,7 @@ type DatabaseConfigs struct {
 	UserInfo      DatabaseConfig `yaml:"user_info" envPrefix:"USER_INFO_"`
 	Poi           DatabaseConfig `yaml:"poi" envPrefix:"POI_"`
 	WxMiniProgram DatabaseConfig `yaml:"wx_mini_program" envPrefix:"WX_"`
+	Image         DatabaseConfig `yaml:"image" envPrefix:"IMAGE_"`
 }
 
 // DatabaseConfig database 配置
@@ -38,4 +39,6 @@ const (
 	DatabaseTypeWxMiniProgram = "wx_mini_program"
 	// DatabaseTypeTxMap 腾讯地图
 	DatabaseTypeTxMap = "tx_map"
+	// DatabaseTypeCos cos
+	DatabaseTypeCos = "cos"
 )

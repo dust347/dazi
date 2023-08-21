@@ -2,7 +2,9 @@ package domain
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/dust347/dazi/internal/dao"
 	"github.com/dust347/dazi/internal/model"
@@ -13,9 +15,10 @@ import (
 
 // UserInfoRepo 用户信息管理
 type UserInfoRepo struct {
-	user dao.UserInfoManager
-	poi  dao.PoiGetter ``
-	wx   dao.LoginChecker
+	user  dao.UserInfoManager
+	poi   dao.PoiGetter ``
+	wx    dao.LoginChecker
+	image dao.ImageUploader
 }
 
 // NewUserInfoRepo 创建 UserInfoRepo 实例
@@ -36,6 +39,11 @@ func NewUserInfoRepo() (*UserInfoRepo, error) {
 	repo.wx, err = dao.NewLoginChecker(&config.GetConfig().Database.WxMiniProgram)
 	if err != nil {
 		return nil, errors.WithMsg(err, "init wx err")
+	}
+
+	repo.image, err = dao.NewImageUploader(&config.GetConfig().Database.Image)
+	if err != nil {
+		return nil, errors.WithMsg(err, "init image err")
 	}
 
 	return &repo, nil
@@ -157,4 +165,25 @@ func (repo *UserInfoRepo) Nearby(ctx context.Context, id string, loc *model.Loca
 	}
 
 	return nearby, nil
+}
+
+// UploadAvatar 上传头像
+func (repo *UserInfoRepo) UploadAvatar(ctx context.Context, userID, extName string, image model.ImageFile) error {
+	// 上传图片
+	fileName := filepath.Join(userID, fmt.Sprintf("avatar%s", extName))
+	path, err := repo.image.Upload(ctx, fileName, image)
+	if err != nil {
+		return errors.WithMsg(err, "upload image err")
+	}
+
+	// 更新图片地址
+	err = repo.Update(ctx, &model.UserInfo{
+		ID:        userID,
+		AvatarURL: path,
+	})
+	if err != nil {
+		return errors.WithMsg(err, "update avatar url err")
+	}
+
+	return nil
 }

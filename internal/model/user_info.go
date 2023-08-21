@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 	"time"
@@ -197,4 +198,9 @@ func (loc *Location) UnmarshalJSON(data []byte) error {
 type CityInfo struct {
 	CityCode string
 	CityName string
+}
+
+// ImageFile 图片文件
+type ImageFile interface {
+	io.Reader
 }

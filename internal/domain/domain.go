@@ -17,6 +17,8 @@ type UserInfoManager interface {
 	Query(ctx context.Context, id string) (*model.UserInfo, error)
 	// 附近用户
 	Nearby(ctx context.Context, id string, loc *model.Location) ([]model.UserInfo, error)
+	// 更新头像
+	UploadAvatar(ctx context.Context, userID, extName string, image model.ImageFile) error
 }
 
 // NewUserInfoManager 创建 UserInfoManager 实例

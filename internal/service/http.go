@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"net/http"
+	"path"
 
 	"github.com/dust347/dazi/internal/domain"
 	"github.com/dust347/dazi/internal/model"
@@ -190,6 +191,42 @@ func Nearby(c *gin.Context) {
 	}
 
 	resp.Users = users
+
+	c.JSON(http.StatusOK, &resp)
+	return
+}
+
+// UploadAvatar 上传头像
+func UploadAvatar(c *gin.Context) {
+	var resp HTTPResp
+
+	id := c.Request.Header.Get("user_id")
+	file, err := c.FormFile("image")
+	if err != nil {
+		resp.ErrCode = errors.Type(err)
+		resp.ErrMsg = err.Error()
+
+		c.JSON(http.StatusInternalServerError, &resp)
+		return
+	}
+
+	image, err := file.Open()
+	if err != nil {
+		resp.ErrCode = errors.Type(err)
+		resp.ErrMsg = err.Error()
+
+		c.JSON(http.StatusInternalServerError, &resp)
+		return
+	}
+	defer image.Close()
+	err = userInfo.UploadAvatar(context.Background(), id, path.Ext(file.Filename), image)
+	if err != nil {
+		resp.ErrCode = errors.Type(err)
+		resp.ErrMsg = err.Error()
+
+		c.JSON(http.StatusInternalServerError, &resp)
+		return
+	}
 
 	c.JSON(http.StatusOK, &resp)
 	return

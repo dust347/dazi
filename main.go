@@ -21,6 +21,7 @@ func main() {
 	r.GET("/user/query", service.UserQuery)
 	r.POST("/user/update", service.UserUpdate)
 	r.POST("/nearby", service.Nearby)
+	r.POST("/user/upload_avatar", service.UploadAvatar)
 
 	r.Run()
 }
