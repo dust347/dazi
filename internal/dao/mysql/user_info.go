@@ -85,9 +85,12 @@ func (cli *UserInfoClient) Update(ctx context.Context, user *model.UserInfo) err
 		return errors.New(errors.ParamErr, "user is nil")
 	}
 
-	err := cli.prx.Table(cli.cfg.Name).Where("id = ?", user.ID).Updates(user).Error
-	if err != nil {
-		return errors.WithMsg(err, "update err")
+	resp := cli.prx.Table(cli.cfg.Name).Where("id = ?", user.ID).Updates(user)
+	if resp.Error != nil {
+		return errors.WithMsg(resp.Error, "update err")
+	}
+	if resp.RowsAffected == 0 {
+		return errors.New(errors.ParamErr, "have no user update")
 	}
 
 	return nil

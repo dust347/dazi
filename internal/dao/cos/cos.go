@@ -2,9 +2,9 @@ package cos
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
-	"path/filepath"
 
 	"github.com/dust347/dazi/internal/model"
 	"github.com/dust347/dazi/internal/pkg/errors"
@@ -51,5 +51,5 @@ func (cli *Client) Upload(ctx context.Context, fileName string, image model.Imag
 		return "", errors.WithMsg(err, "upload err")
 	}
 
-	return filepath.Join(cli.url, fileName), nil
+	return fmt.Sprintf("%s/%s", cli.url, fileName), nil
 }
