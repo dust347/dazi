@@ -76,6 +76,9 @@ func (repo *UserInfoRepo) Login(ctx context.Context, jsCode string, user *model.
 	// 否则更新
 	user.ID = u.ID
 	if err := repo.Update(ctx, user); err != nil {
+		if errors.Type(err) == errors.NoUserUpdateErr {
+			return user, nil
+		}
 		return nil, err
 	}
 

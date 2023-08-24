@@ -17,6 +17,8 @@ const (
 	ParamErr = 1
 	// DuplicatedErr 重复记录错误
 	DuplicatedErr = 2
+	// NoUserUpdateErr 没有用户更新
+	NoUserUpdateErr = 3
 )
 
 // Typer 携带错误类型的 error 接口

@@ -90,7 +90,7 @@ func (cli *UserInfoClient) Update(ctx context.Context, user *model.UserInfo) err
 		return errors.WithMsg(resp.Error, "update err")
 	}
 	if resp.RowsAffected == 0 {
-		return errors.New(errors.ParamErr, "have no user update")
+		return errors.New(errors.NoUserUpdateErr, "have no user update")
 	}
 
 	return nil
