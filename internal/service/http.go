@@ -116,16 +116,19 @@ func UserUpdate(c *gin.Context) {
 
 	user.ID = c.Request.Header.Get("user_id")
 
+	var resp HTTPResp
 	if err := userInfo.Update(context.Background(), &user); err != nil {
-		c.Abort()
-		c.JSON(http.StatusInternalServerError, &HTTPResp{
-			ErrCode: errors.Type(err),
-			ErrMsg:  err.Error(),
-		})
-		return
+		resp.ErrCode = errors.Type(err)
+		resp.ErrMsg = err.Error()
+
+		if resp.ErrCode == errors.UnknownErr {
+			c.JSON(http.StatusInternalServerError, &resp)
+			c.Abort()
+			return
+		}
 	}
 
-	c.JSON(http.StatusOK, &HTTPResp{})
+	c.JSON(http.StatusOK, &resp)
 	return
 }
 
@@ -196,9 +199,15 @@ func Nearby(c *gin.Context) {
 	return
 }
 
+// UploadAvatarResp 附近的人返回
+type UploadAvatarResp struct {
+	HTTPResp
+	AvatarURL string `json:"avatar_url"`
+}
+
 // UploadAvatar 上传头像
 func UploadAvatar(c *gin.Context) {
-	var resp HTTPResp
+	var resp UploadAvatarResp
 
 	id := c.Request.Header.Get("user_id")
 	file, err := c.FormFile("image")
@@ -219,7 +228,7 @@ func UploadAvatar(c *gin.Context) {
 		return
 	}
 	defer image.Close()
-	err = userInfo.UploadAvatar(context.Background(), id, path.Ext(file.Filename), image)
+	url, err := userInfo.UploadAvatar(context.Background(), id, path.Ext(file.Filename), image)
 	if err != nil {
 		resp.ErrCode = errors.Type(err)
 		resp.ErrMsg = err.Error()
@@ -228,6 +237,7 @@ func UploadAvatar(c *gin.Context) {
 		return
 	}
 
+	resp.AvatarURL = url
 	c.JSON(http.StatusOK, &resp)
 	return
 }

@@ -171,12 +171,12 @@ func (repo *UserInfoRepo) Nearby(ctx context.Context, id string, loc *model.Loca
 }
 
 // UploadAvatar 上传头像
-func (repo *UserInfoRepo) UploadAvatar(ctx context.Context, userID, extName string, image model.ImageFile) error {
+func (repo *UserInfoRepo) UploadAvatar(ctx context.Context, userID, extName string, image model.ImageFile) (string, error) {
 	// 上传图片
 	fileName := filepath.Join(userID, fmt.Sprintf("avatar%s", extName))
 	path, err := repo.image.Upload(ctx, fileName, image)
 	if err != nil {
-		return errors.WithMsg(err, "upload image err")
+		return "", errors.WithMsg(err, "upload image err")
 	}
 
 	// 更新图片地址
@@ -185,8 +185,8 @@ func (repo *UserInfoRepo) UploadAvatar(ctx context.Context, userID, extName stri
 		AvatarURL: path,
 	})
 	if err != nil {
-		return errors.WithMsg(err, "update avatar url err")
+		return "", errors.WithMsg(err, "update avatar url err")
 	}
 
-	return nil
+	return path, nil
 }
