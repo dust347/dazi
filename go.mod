@@ -3,10 +3,12 @@ module github.com/dust347/dazi
 go 1.19
 
 require (
+	github.com/caarlos0/env/v9 v9.0.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/smartystreets/goconvey v1.8.0
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.42
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
@@ -14,7 +16,6 @@ require (
 
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
-	github.com/caarlos0/env/v9 v9.0.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
@@ -39,7 +40,6 @@ require (
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/smartystreets/assertions v1.13.1 // indirect
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.42 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect

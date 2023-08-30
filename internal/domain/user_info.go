@@ -184,9 +184,10 @@ func (repo *UserInfoRepo) UploadAvatar(ctx context.Context, userID, extName stri
 		ID:        userID,
 		AvatarURL: path,
 	})
-	if err != nil {
+	switch errors.Type(err) {
+	case errors.NoErr, errors.NoUserUpdateErr:
+		return path, nil
+	default:
 		return "", errors.WithMsg(err, "update avatar url err")
 	}
-
-	return path, nil
 }
