@@ -5,11 +5,18 @@ type Config struct {
 	Database DatabaseConfigs `yaml:"database" envPrefix:"DATABASE_"`
 
 	JWT JWTConfig `yaml:"jwt" envPrefix:"JWT_"`
+	IM  IMConfig  `yaml:"im" envPrefix:"IM_"`
 }
 
 // JWTConfig jwt 相关配置
 type JWTConfig struct {
 	SignKey string `yaml:"sign_key" env:"SIGN_KEY"`
+}
+
+// IMConfig im 相关配置
+type IMConfig struct {
+	AppID     int    `yaml:"app_id" env:"APP_ID"`
+	SecretKey string `yaml:"secret_key" env:"SECRET_KEY"`
 }
 
 // DatabaseConfigs 数据库配置
@@ -18,6 +25,7 @@ type DatabaseConfigs struct {
 	Poi           DatabaseConfig `yaml:"poi" envPrefix:"POI_"`
 	WxMiniProgram DatabaseConfig `yaml:"wx_mini_program" envPrefix:"WX_"`
 	Image         DatabaseConfig `yaml:"image" envPrefix:"IMAGE_"`
+	IM            DatabaseConfig `yaml:"im" envPrefix:"IM_"`
 }
 
 // DatabaseConfig database 配置
@@ -41,4 +49,6 @@ const (
 	DatabaseTypeTxMap = "tx_map"
 	// DatabaseTypeCos cos
 	DatabaseTypeCos = "cos"
+	// DatabaseTypeIM im
+	DatabaseTypeIM = "im"
 )

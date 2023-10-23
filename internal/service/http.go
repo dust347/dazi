@@ -9,6 +9,7 @@ import (
 	"github.com/dust347/dazi/internal/model"
 	"github.com/dust347/dazi/internal/pkg/errors"
 	"github.com/dust347/dazi/internal/pkg/jwt"
+	"github.com/dust347/dazi/internal/pkg/usersig"
 	"github.com/gin-gonic/gin"
 )
 
@@ -238,6 +239,34 @@ func UploadAvatar(c *gin.Context) {
 	}
 
 	resp.AvatarURL = url
+	c.JSON(http.StatusOK, &resp)
+	return
+}
+
+// IMUserSigResp im user sig
+type IMUserSigResp struct {
+	HTTPResp
+	Sig string `json:"sig"`
+}
+
+// IMUserSig im user sig
+func IMUserSig(c *gin.Context) {
+	userID := c.Request.Header.Get("user_id")
+
+	var resp IMUserSigResp
+	sig, err := usersig.GenUserSig(userID, 86400)
+	if err != nil {
+		resp.ErrCode = errors.Type(err)
+		resp.ErrMsg = err.Error()
+
+		if resp.ErrCode == errors.UnknownErr {
+			c.JSON(http.StatusInternalServerError, &resp)
+			c.Abort()
+			return
+		}
+	}
+
+	resp.Sig = sig
 	c.JSON(http.StatusOK, &resp)
 	return
 }

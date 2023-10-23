@@ -19,6 +19,7 @@ type UserInfoRepo struct {
 	poi   dao.PoiGetter ``
 	wx    dao.LoginChecker
 	image dao.ImageUploader
+	im    dao.IMAccountImporter
 }
 
 // NewUserInfoRepo 创建 UserInfoRepo 实例
@@ -44,6 +45,11 @@ func NewUserInfoRepo() (*UserInfoRepo, error) {
 	repo.image, err = dao.NewImageUploader(&config.GetConfig().Database.Image)
 	if err != nil {
 		return nil, errors.WithMsg(err, "init image err")
+	}
+
+	repo.im, err = dao.NewIMAccountImporter(&config.GetConfig().Database.IM)
+	if err != nil {
+		return nil, errors.WithMsg(err, "init im err")
 	}
 
 	return &repo, nil
@@ -94,6 +100,11 @@ func (repo *UserInfoRepo) Create(ctx context.Context, user *model.UserInfo) erro
 	user.ID = uuid.New()
 	if err := repo.user.Create(ctx, user); err != nil {
 		return errors.WithMsg(err, "create user err")
+	}
+
+	// 向 im 中导入用户信息
+	if err := repo.im.ImportAccount(ctx, user.ID, user.NickName, user.AvatarURL); err != nil {
+		return errors.WithMsg(err, "import im account err")
 	}
 
 	return nil

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/dust347/dazi/internal/dao/cos"
+	"github.com/dust347/dazi/internal/dao/im"
 	"github.com/dust347/dazi/internal/dao/mysql"
 	"github.com/dust347/dazi/internal/dao/tx"
 	"github.com/dust347/dazi/internal/dao/wx"
@@ -91,6 +92,25 @@ func NewImageUploader(cfg *model.DatabaseConfig) (ImageUploader, error) {
 	switch cfg.Type {
 	case model.DatabaseTypeCos:
 		return cos.NewClient(cfg)
+	default:
+		return nil, errors.Errorf(errors.ParamErr, "not support type: %s", cfg.Type)
+	}
+}
+
+// IMAccountImporter im 账号导入
+type IMAccountImporter interface {
+	ImportAccount(ctx context.Context, userID, nick, avatar string) error
+}
+
+// NewIMAccountImporter 创建 IMAccountImporter 实例
+func NewIMAccountImporter(cfg *model.DatabaseConfig) (IMAccountImporter, error) {
+	if cfg == nil {
+		return nil, errors.New(errors.ParamErr, "cfg is nil")
+	}
+
+	switch cfg.Type {
+	case model.DatabaseTypeIM:
+		return im.NewClient(cfg)
 	default:
 		return nil, errors.Errorf(errors.ParamErr, "not support type: %s", cfg.Type)
 	}

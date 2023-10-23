@@ -89,6 +89,8 @@ github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.563/go.mod 
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/kms v1.0.563/go.mod h1:uom4Nvi9W+Qkom0exYiJ9VWJjXwyxtPYTkKkaLMlfE0=
 github.com/tencentyun/cos-go-sdk-v5 v0.7.42 h1:Up1704BJjI5orycXKjpVpvuOInt9GC5pqY4knyE9Uds=
 github.com/tencentyun/cos-go-sdk-v5 v0.7.42/go.mod h1:LUFnaqRmGk6pEHOaRmdn2dCZR2j0cSsM5xowWFPTPao=
+github.com/tencentyun/tls-sig-api-v2-golang v1.3.0 h1:mW4onVqOP6MqkJtTay74Tch6NvjwQRXeCuhUC/p6YYk=
+github.com/tencentyun/tls-sig-api-v2-golang v1.3.0/go.mod h1:0L1MSijyEq6a74xZ02h0qKfN8y6RcvDiNabIZWXereE=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
